@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { OrderModule as AdminOrderModule } from './admin/order/order.module';
 import { RouterModule } from '@nestjs/core';
 import { AuthModule } from './client/auth/auth.module';
+import { OrderModule } from './client/order/order.module';
 
 @Module({
 	imports: [
@@ -17,6 +18,7 @@ import { AuthModule } from './client/auth/auth.module';
 			},
 		]),
 		AuthModule,
+		OrderModule,
 	],
 })
 export class AppModule {}

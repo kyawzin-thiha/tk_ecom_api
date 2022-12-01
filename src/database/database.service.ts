@@ -26,6 +26,9 @@ export class DatabaseService {
 			where: {
 				orderId: orderId,
 			},
+			include: {
+				orderItems: true,
+			}
 		});
 	}
 

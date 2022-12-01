@@ -1,6 +1,8 @@
+import { JwtTokenService } from 'src/helper/jwt.service';
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { createClient } from 'redis';
+import { AwsService } from './aws.service';
 import { PrismaService } from './prisma.service';
 import { RedisService } from './redis.service';
 
@@ -26,7 +28,9 @@ import { RedisService } from './redis.service';
 			},
 		},
 		RedisService,
+		JwtTokenService,
+		AwsService,
 	],
-	exports: [PrismaService],
+	exports: [PrismaService, RedisService, JwtTokenService, AwsService],
 })
 export class HelperModule {}
