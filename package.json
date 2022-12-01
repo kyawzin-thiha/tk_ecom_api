@@ -20,6 +20,7 @@
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@prisma/client": "^4.7.0",
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2"
   },
@@ -36,6 +37,7 @@
     "husky": "^8.0.2",
     "lint-staged": "^13.0.4",
     "prettier": "^2.3.2",
+    "prisma": "^4.7.0",
     "source-map-support": "^0.5.20",
     "ts-loader": "^9.2.3",
     "ts-node": "^10.0.0",
