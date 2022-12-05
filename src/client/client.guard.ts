@@ -12,7 +12,7 @@ export class ClientGuard implements CanActivate {
 	async canActivate(context: ExecutionContext): Promise<boolean> {
 		const request = context.switchToHttp().getRequest();
 		console.log('enter');
-		const token = request.signedCookies['token'];
+		const token = request.signedCookies['token'] || request.headers['token'];
 		if (!token) {
 			return false;
 		}
