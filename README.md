@@ -339,7 +339,7 @@ const data = await fetch('/admin/order/deleteOrder', {
 
 ```
 
-**Teach Stack**
+**Tech Stack**
 
 - Typescript 
 - Node.js (Nest.js) 
