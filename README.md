@@ -1,73 +1,346 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# Welcome from TK-Graphics E-commerce API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+This is an API for TK-Graphics store front website. 
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+**Services Used**
+- Redis
+- MongoDB
+- AWS (S3)
 
-## Description
+**Required ENV Variables**
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- ADMIN_USER
+- API_URL
+- AWS_REGION
+- AWS_BUCKET
+- AWS_S3_DOMAIN
+- AWS_SECRET_ACCESS_KEY
+- AWS_ACCESS_KEY_ID
+- ORIGIN
+- JWT_SECRET
+- DATABASE_URL
 
-## Installation
+**API HTTP REQUEST EXAMPLES**
 
-```bash
-$ npm install
+###### Get all orders
+```
+/admin/order/getAll
 ```
 
-## Running the app
+  This route will return all orders
 
-```bash
-# development
-$ npm run start
+```javascript
+const data = await fetch('/admin/order/getAll', {
+  method: "GET", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  }
+})
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+Example Response 
+```javascript
+[
+  {
+    orderId: "O1670252018110:2:1",
+    orderStatus: "PENDING",
+    customerId: "2299770097",
+    orderItems: [
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/150",
+        qty: 1,
+      },
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/130",
+        qty: 2,
+      },
+    ]
+  }
+]
 ```
 
-## Support
+###### Get an order
+```
+/admin/order/:orderId
+```
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  This route will an order with specified orderId
 
-## Stay in touch
+```javascript
+const data = await fetch(`/admin/order/${orderId}`, {
+  method: "GET", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  }
+})
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+```
 
-## License
+Example Response 
+```javascript
+{
+  orderId: "O1670252018110:2:1",
+  orderStatus: "PENDING",
+  customerId: "2299770097",
+  orderItems: [
+    {
+      productId: "7886",
+      imageURL: "https://via.placeholder.com/150",
+      qty: 1,
+    },
+    {
+      productId: "7886",
+      imageURL: "https://via.placeholder.com/130",
+      qty: 2,
+    },
+  ]
+}
+```
+###### Get all orders by date
+```
+/admin/order/searchOrdersByDate
+```
 
-Nest is [MIT licensed](LICENSE).
+  This route will return all orders within specified date
+
+```javascript
+const data = await fetch('/admin/order/searchOrdersByDate', {
+  method: "GET", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  },
+  body: JSON.stringify({
+    from: Date,
+    to: Date (one month ago)
+  })
+})
+
+```
+
+Example Response 
+```javascript
+[
+  {
+    orderId: "O1670252018110:2:1",
+    orderStatus: "PENDING",
+    customerId: "2299770097",
+    orderItems: [
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/150",
+        qty: 1,
+      },
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/130",
+        qty: 2,
+      },
+    ]
+  }
+]
+```
+
+###### Get all orders by customerId
+```
+/admin/order/searchOrdersByCustomerId
+```
+
+  This route will return all orders from specified customer
+
+```javascript
+const data = await fetch('/admin/order/searchOrdersByCustomerId', {
+  method: "GET", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  },
+  body: JSON.stringify({
+    customerId: "2299770097",
+    from: Date,
+    to: Date (one month ago)
+  })
+})
+
+```
+
+Example Response 
+```javascript
+[
+  {
+    orderId: "O1670252018110:2:1",
+    orderStatus: "PENDING",
+    customerId: "2299770097",
+    orderItems: [
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/150",
+        qty: 1,
+      },
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/130",
+        qty: 2,
+      },
+    ]
+  }
+]
+```
+###### Get all orders by productId
+```
+/admin/order/searchOrdersByProductId
+```
+
+  This route will return all orders with specified product
+
+```javascript
+const data = await fetch('/admin/order/searchOrdersByProductId', {
+  method: "GET", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  },
+  body: JSON.stringify({
+    product: "7886",
+    from: Date,
+    to: Date (one month ago)
+  })
+})
+
+```
+
+Example Response 
+```javascript
+[
+  {
+    orderId: "O1670252018110:2:1",
+    orderStatus: "PENDING",
+    customerId: "2299770097",
+    orderItems: [
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/150",
+        qty: 1,
+      },
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/130",
+        qty: 2,
+      },
+    ]
+  }
+]
+```
+
+###### Get all orders by order status
+```
+/admin/order/searchOrdersByOrderStatus
+```
+
+  This route will return all orders with specified order status
+
+```javascript
+const data = await fetch('/admin/order/searchOrdersByOrderStatus', {
+  method: "GET", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  },
+  body: JSON.stringify({
+    status: "PENDING",
+    from: Date,
+    to: Date (one month ago)
+  })
+})
+
+```
+
+Example Response 
+```javascript
+[
+  {
+    orderId: "O1670252018110:2:1",
+    orderStatus: "PENDING",
+    customerId: "2299770097",
+    orderItems: [
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/150",
+        qty: 1,
+      },
+      {
+        productId: "7886",
+        imageURL: "https://via.placeholder.com/130",
+        qty: 2,
+      },
+    ]
+  }
+]
+```
+
+###### Update order status
+```
+/admin/order/updateOrderStatus
+```
+
+  This route will update the status of specified order
+
+```javascript
+const data = await fetch('/admin/order/updateOrderStatus', {
+  method: "PUT", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  },
+  body: JSON.stringify({
+    orderId: "O1670252018110:2:1",
+    status: "PROCESSING",
+  })
+})
+
+```
+
+Example Response 
+```javascript
+{
+  orderId: "O1670252018110:2:1",
+  orderStatus: "PROCESSING",
+  customerId: "2299770097",
+  orderItems: [
+    {
+      productId: "7886",
+      imageURL: "https://via.placeholder.com/150",
+      qty: 1,
+    },
+    {
+      productId: "7886",
+      imageURL: "https://via.placeholder.com/130",
+      qty: 2,
+    },
+  ]
+}
+```
+
+###### Delete Order
+```
+/admin/order/deleteOrder
+```
+
+  This route will delete an order
+
+```javascript
+const data = await fetch('/admin/order/deleteOrder', {
+  method: "PUT", 
+  headers: {
+    user: process.env.ADMIN_USER,
+  },
+  body: JSON.stringify({
+    orderId: "O1670252018110:2:1",
+  })
+})
+
+```
+
+**Teach Stack**
+
+- Typescript 
+- Node.js (Nest.js) 
+- Prisma (ORM)
