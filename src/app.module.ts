@@ -5,6 +5,7 @@ import { OrderModule as AdminOrderModule } from './admin/order/order.module';
 import { RouterModule } from '@nestjs/core';
 import { AuthModule } from './client/auth/auth.module';
 import { OrderModule } from './client/order/order.module';
+import { ProductModule } from './client/product/product.module';
 
 @Module({
 	imports: [
@@ -19,6 +20,7 @@ import { OrderModule } from './client/order/order.module';
 		]),
 		AuthModule,
 		OrderModule,
+		ProductModule,
 	],
 })
 export class AppModule {}
